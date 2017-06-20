@@ -2,21 +2,69 @@
 <head>
     <title>Ping example</title>
     <script src="ping.js"></script>
-    
-    <script language="javascript">
-        function PingServer() {
-            with (Utilities) {
-                Ping("ws://echo.websocket.org", processResult);
-            }
-        }
+    <script src="biometricClient.js"></script>
 
-        function processResult(state, timeStamp) {
-            console.log(state + " " + timeStamp);
+    <script language="javascript">
+
+        var serverAddress = "ws://localhost:52000/Fingerprint/";
+        var guid = "123-456-abc-def";
+        var executableProtocol = null;
+        var wasProtocolExecuted = false;
+        var connectionRetries = 3;
+        var timeOutRetry = 150;
+        var biometricClient = null;
+
+        console.log(Utilities);
+
+        with (Utilities) {
+            function processResult(state, timeStamp) {
+                console.log(state + " " + timeStamp);
+            }
+
+            function Initialize() {
+                executableProtocol = document.getElementById("executableProtocolId");
+                executableProtocol.href = `clauthurl://${guid}`;
+
+                Ping(serverAddress, onPingResponse);
+            }
+
+            function onPingResponse(status, ellapsedtime) {
+                console.log(`Ping response = ${status} in ${ellapsedtime} milliseconds`);
+
+                if (status === true) {
+                    biometricClient = new BiometricClient(serverAddress, onOpen, onMessage, onClose, onClose);
+                } else {
+                    /*if (!wasProtocolExecuted) {
+                        executableProtocol.click();
+                    }*/
+
+                    if (connectionRetries > 1) {
+                        setTimeout(Initialize, timeOutRetry);
+                        connectionRetries = connectionRetries - 1;
+                    }
+                }
+            }
+
+            function onOpen(evt) {
+                if (biometricClient != null) {
+                    console.log("Before Send");
+                    biometricClient.Send("ShowWindow");
+                }
+                console.log("onOpen");
+            }
+
+            function onMessage(message) {
+                console.log(message);
+            }
+
+            function onClose(evt) {
+                console.log("onClose");
+            }
         }
     </script>
 </head>
 
-<body onload="PingServer()">
-
+<body onload="Initialize()">
+    <a id="executableProtocolId">AAA</a>
 </body>
 </html>
