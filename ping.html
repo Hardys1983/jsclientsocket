@@ -1,0 +1,22 @@
+<html>
+<head>
+    <title>Ping example</title>
+    <script src="ping.js"></script>
+    
+    <script language="javascript">
+        function PingServer() {
+            with (Utilities) {
+                Ping("ws://echo.websocket.org", processResult);
+            }
+        }
+
+        function processResult(state, timeStamp) {
+            console.log(state + " " + timeStamp);
+        }
+    </script>
+</head>
+
+<body onload="PingServer()">
+
+</body>
+</html>
