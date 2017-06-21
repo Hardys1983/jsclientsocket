@@ -20,11 +20,12 @@ namespace WebSocketServer
             _httpListener.Prefixes.Add(httpListenerPrefix);
 
             OnMessageArrive += onMessageArrive;
-            _httpListener.Start();
         }
 
         public void Start()
         {
+            _httpListener.Start();
+
             ThreadPool.QueueUserWorkItem(o =>
             {
                 Console.WriteLine("Webserver running...");
@@ -55,6 +56,11 @@ namespace WebSocketServer
                     // suppress any exceptions  
                 }
             });
+        }
+
+        public void Stop()
+        {
+            _httpListener.Stop();
         }
 
         private async Task ProcessRequestAsync(HttpListenerContext httpListenerContext)

@@ -16,6 +16,8 @@ namespace WebSocketServer
                 Console.WriteLine("Enter some comment to send:");
                 var comment = Console.ReadLine();
                 Server.SendAsync(comment).Wait(CancellationToken.None);
+                Server.Stop();
+                Server.Start();
             }
         }
 
