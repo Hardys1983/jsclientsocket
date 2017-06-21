@@ -34,9 +34,9 @@
                 if (status === true) {
                     biometricClient = new BiometricClient(serverAddress, onOpen, onMessage, onClose, onClose);
                 } else {
-                    /*if (!wasProtocolExecuted) {
-                        executableProtocol.click();
-                    }*/
+                    if (!wasProtocolExecuted) {
+                        //executableProtocol.click();
+                    }
 
                     if (connectionRetries > 1) {
                         setTimeout(Initialize, timeOutRetry);
@@ -47,10 +47,8 @@
 
             function onOpen(evt) {
                 if (biometricClient != null) {
-                    console.log("Before Send");
                     biometricClient.Send("ShowWindow");
                 }
-                console.log("onOpen");
             }
 
             function onMessage(message) {
@@ -58,7 +56,6 @@
             }
 
             function onClose(evt) {
-                console.log("onClose");
             }
         }
     </script>
