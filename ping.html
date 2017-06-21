@@ -16,6 +16,10 @@
 
         console.log(Utilities);
 
+        function DisconnectClient() {
+            biometricClient.Close();
+        }
+
         with (Utilities) {
             function processResult(state, timeStamp) {
                 console.log(state + " " + timeStamp);
@@ -35,7 +39,7 @@
                     biometricClient = new BiometricClient(serverAddress, onOpen, onMessage, onClose, onClose);
                 } else {
                     if (!wasProtocolExecuted) {
-                        //executableProtocol.click();
+                        executableProtocol.click();
                     }
 
                     if (connectionRetries > 1) {
@@ -63,5 +67,6 @@
 
 <body onload="Initialize()">
     <a id="executableProtocolId">AAA</a>
+    <Button onclick="DisconnectClient()">Disconnect</Button>
 </body>
 </html>
